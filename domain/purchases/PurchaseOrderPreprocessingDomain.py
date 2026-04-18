@@ -125,7 +125,12 @@ class PurchaseOrderPreprocessingDomain:
     def convert_df_parquet(df):
         """Convert dataframe file to parquet"""
         try:
-            df.to_parquet('../../data/purchase-order-data-2012-2015-.parquet', compression='brotli')
+            import os
+            BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            df.to_parquet(
+                os.path.join(BASE_DIR, "data", "purchase-order-data-2012-2015-.parquet"),
+                compression='brotli'
+            )
             return df
         except Exception as e:
             print("Error converting dataframe to Parquet file: " + e.__str__())
