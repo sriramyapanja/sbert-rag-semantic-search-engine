@@ -1,7 +1,7 @@
 # Semantic Search API with S-BERT and RAG/LLM
 
 > A Python search engine that finds California government purchase records 
-> by meaning, not keywords — and measures how well it does it.
+> by meaning, not keywords and measures how well it does it.
 
 ---
 
