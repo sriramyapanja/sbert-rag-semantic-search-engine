@@ -14,7 +14,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
-- [Module 3 — Ragas Evaluation (Personal Extension)](#module-3--ragas-evaluation-personal-extension)
+- [Module 3 - Ragas Evaluation (Personal Extension)](#module-3--ragas-evaluation-personal-extension)
 - [API Reference](#api-reference)
 - [Takeaways](#takeaways)
 - [License](#license)
