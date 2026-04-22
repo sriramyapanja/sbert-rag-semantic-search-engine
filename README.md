@@ -68,10 +68,7 @@ finishing the course, using tools and patterns not covered in the material.
 |---|---|---|
 | ![RAG Swagger Home](screenshots/04-rag-swagger-home.png) | ![Try it out](screenshots/05-rag-swagger-try-it-out.png) | ![Result](screenshots/06-rag-swagger-result-200.png) |
 
-### Module 3 - Ragas Evaluation Output
-
-![Ragas Scores](08-ragas-evaluation-scores.png)
-
+![RAGAS Scores](screenshots/08-ragas-evaluation-scores.png)
 ---
 
 ## Technology Stack
