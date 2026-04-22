@@ -5,7 +5,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from flask import Flask, Response, request
 from flasgger import Swagger
-from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -24,13 +24,10 @@ class SearchRagApi:
 
     def __init__(self):
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-        llm = HuggingFaceEndpoint(
-            repo_id="HuggingFaceH4/zephyr-7b-beta",
-            task="conversational",
-            temperature=0.1,
-            huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN")
+        self.llm_model = ChatOpenAI(
+            model_name="gpt-4o-mini",
+            temperature=0
         )
-        self.llm_model = ChatHuggingFace(llm=llm)
 
     def load_corpus_datasource(self):
         """Load corpus data source"""
@@ -119,10 +116,25 @@ Answer:"""
         """
         try:
             json_query = json.loads(request.data)
+            text_query = json_query['sentence_query']
+
             searchRagApi = SearchRagApi()
-            json_result = searchRagApi.search_text(json_query['sentence_query'])
-            json_result = '{ "result" : "' + json_result + '"}'
-            return Response(json_result, mimetype='application/json'), 200
+
+            # Run pipeline manually so we can expose contexts for Ragas evaluation
+            list_documents = searchRagApi.load_corpus_datasource()
+            documents_embeddings = searchRagApi.generate_corpus_embeddings(list_documents)
+            query_embedding = searchRagApi.generate_query_embeddings(text_query)
+            contexts = searchRagApi.retrieve_documents(
+                list_documents, documents_embeddings, query_embedding
+            )
+            answer = searchRagApi.generate_augmented_response(text_query, contexts)
+
+            response_body = json.dumps({
+                "answer": answer,
+                "contexts": contexts
+            })
+            return Response(response_body, mimetype='application/json'), 200
+
         except Exception as e:
             print("FULL ERROR:", str(e))
             import traceback
